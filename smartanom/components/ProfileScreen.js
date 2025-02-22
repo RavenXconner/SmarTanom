@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DarkModeContext } from '../components/DarkModeContext'; // Ensure this path is correct
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -6,6 +7,8 @@ import { DrawerActions } from '@react-navigation/native';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const { darkMode } = useContext(DarkModeContext); // Access darkMode state
+  const styles = getStyles(darkMode); // Dynamically generate styles
 
   return (
     <View style={styles.container}>
@@ -14,7 +17,7 @@ const ProfileScreen = () => {
         style={styles.backButton}
         onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
       >
-        <Ionicons name="arrow-back" size={24} color="#3498db" />
+        <Ionicons name="arrow-back" size={24} color={darkMode ? '#3498db' : '#3498db'} />
         <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
 
@@ -30,28 +33,28 @@ const ProfileScreen = () => {
 
       {/* Edit Profile Button */}
       <TouchableOpacity style={styles.editButton}>
-        <Ionicons name="create" size={20} color="#3498db" />
+        <Ionicons name="create" size={20} color={darkMode ? '#3498db' : '#3498db'} />
         <Text style={styles.editButtonText}>Edit Profile</Text>
       </TouchableOpacity>
 
       {/* Profile Details */}
       <View style={styles.detailsContainer}>
         <View style={styles.detailItem}>
-          <Ionicons name="person" size={24} color="#3498db" />
+          <Ionicons name="person" size={24} color={darkMode ? '#3498db' : '#3498db'} />
           <View style={styles.detailTextContainer}>
             <Text style={styles.detailTitle}>Full Name</Text>
             <Text style={styles.detailValue}>John Doe</Text> {/* Replace with dynamic data */}
           </View>
         </View>
         <View style={styles.detailItem}>
-          <Ionicons name="mail" size={24} color="#3498db" />
+          <Ionicons name="mail" size={24} color={darkMode ? '#3498db' : '#3498db'} />
           <View style={styles.detailTextContainer}>
             <Text style={styles.detailTitle}>Email</Text>
             <Text style={styles.detailValue}>johndoe@example.com</Text> {/* Replace with dynamic data */}
           </View>
         </View>
         <View style={styles.detailItem}>
-          <Ionicons name="call" size={24} color="#3498db" />
+          <Ionicons name="call" size={24} color={darkMode ? '#3498db' : '#3498db'} />
           <View style={styles.detailTextContainer}>
             <Text style={styles.detailTitle}>Phone</Text>
             <Text style={styles.detailValue}>+1 234 567 890</Text> {/* Replace with dynamic data */}
@@ -62,10 +65,11 @@ const ProfileScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+// Dynamically generate styles based on darkMode
+const getStyles = (darkMode) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: darkMode ? '#121212' : '#ffffff', // Dark mode background
     padding: 20,
   },
   backButton: {
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    color: '#3498db',
+    color: darkMode ? '#3498db' : '#3498db', // Dark mode text color
     marginLeft: 10,
   },
   header: {
@@ -92,24 +96,24 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2c3e50',
+    color: darkMode ? '#ffffff' : '#2c3e50', // Dark mode text color
   },
   userEmail: {
     fontSize: 16,
-    color: '#7f8c8d',
+    color: darkMode ? '#bdc3c7' : '#7f8c8d', // Dark mode text color
   },
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: darkMode ? '#333333' : '#ecf0f1', // Dark mode background
     padding: 10,
     borderRadius: 10,
     marginBottom: 20,
   },
   editButtonText: {
     fontSize: 16,
-    color: '#3498db',
+    color: darkMode ? '#3498db' : '#3498db', // Dark mode text color
     marginLeft: 10,
   },
   detailsContainer: {
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ecf0f1',
+    borderBottomColor: darkMode ? '#333333' : '#ecf0f1', // Dark mode border color
   },
   detailTextContainer: {
     flex: 1,
@@ -128,11 +132,11 @@ const styles = StyleSheet.create({
   },
   detailTitle: {
     fontSize: 14,
-    color: '#7f8c8d',
+    color: darkMode ? '#bdc3c7' : '#7f8c8d', // Dark mode text color
   },
   detailValue: {
     fontSize: 16,
-    color: '#2c3e50',
+    color: darkMode ? '#ffffff' : '#2c3e50', // Dark mode text color
   },
 });
 
