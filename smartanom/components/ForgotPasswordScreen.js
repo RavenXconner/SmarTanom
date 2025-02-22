@@ -1,3 +1,4 @@
+// screens/ForgotPasswordScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -13,7 +14,7 @@ const ForgotPasswordScreen = () => {
     setTimeout(() => {
       setLoading(false);
       alert(`Password reset link sent to ${email}`);
-      navigation.goBack();
+      navigation.goBack(); // Navigate back to Login
     }, 2000);
   };
 

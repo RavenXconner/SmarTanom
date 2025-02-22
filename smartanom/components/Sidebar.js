@@ -1,39 +1,111 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { DarkModeContext } from '../components/DarkModeContext';
 
-const Sidebar = () => {
-  const navigation = useNavigation();
+const Sidebar = ({ navigation }) => {
+  const { darkMode } = useContext(DarkModeContext);
+  const styles = getStyles(darkMode);
+
+  // Handle logout confirmation
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => navigation.navigate('Login'),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
-        <Text style={styles.menuItem}>Dashboard</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <Image
+          source={require('../assets/user-avatar.png')}
+          style={styles.avatar}
+        />
+        <Text style={styles.username}>John Doe</Text>
+        <Text style={styles.userEmail}>johndoe@example.com</Text>
+      </View>
+
+      {/* Menu Items */}
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Dashboard')}>
+        <Ionicons name="home" size={24} color={darkMode ? '#3498db' : '#3498db'} />
+        <Text style={styles.menuItemText}>Dashboard</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-        <Text style={styles.menuItem}>Settings</Text>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Settings')}>
+        <Ionicons name="settings" size={24} color={darkMode ? '#3498db' : '#3498db'} />
+        <Text style={styles.menuItemText}>Settings</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <Text style={styles.menuItem}>Profile</Text>
+      <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Profile')}>
+        <Ionicons name="person" size={24} color={darkMode ? '#3498db' : '#3498db'} />
+        <Text style={styles.menuItemText}>Profile</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.menuItem}>Logout</Text>
+
+      {/* Divider */}
+      <View style={styles.divider} />
+
+      {/* Logout Button */}
+      <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+        <Ionicons name="log-out" size={24} color="#e74c3c" />
+        <Text style={[styles.menuItemText, { color: '#e74c3c' }]}>Logout</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (darkMode) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2c3e50',
-    paddingTop: 50,
+    backgroundColor: darkMode ? '#121212' : '#ffffff',
+    paddingTop: 40,
     paddingHorizontal: 20,
   },
-  menuItem: {
+  header: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 10,
+  },
+  username: {
     fontSize: 18,
-    color: '#fff',
-    marginBottom: 20,
+    fontWeight: 'bold',
+    color: darkMode ? '#ffffff' : '#2c3e50',
+  },
+  userEmail: {
+    fontSize: 14,
+    color: darkMode ? '#bdc3c7' : '#7f8c8d',
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: darkMode ? '#333333' : '#ecf0f1',
+  },
+  menuItemText: {
+    fontSize: 16,
+    color: darkMode ? '#ffffff' : '#2c3e50',
+    marginLeft: 20,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: darkMode ? '#333333' : '#ecf0f1',
+    marginVertical: 10,
   },
 });
 

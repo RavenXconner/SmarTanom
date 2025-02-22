@@ -1,20 +1,23 @@
+// screens/LoginScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons'; // Import icons from Expo (or any other icon library)
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // State to manage loading animation
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const navigation = useNavigation();
 
   const handleLogin = () => {
-    setLoading(true);
+    setLoading(true); // Show loading animation
     // Simulate login process
     setTimeout(() => {
-      setLoading(false);
-      navigation.navigate('Dashboard');
-    }, 2000);
+      setLoading(false); // Hide loading animation
+      navigation.navigate('Main'); // Navigate to the DrawerNavigator
+    }, 2000); // Simulate a 2-second delay
   };
 
   return (
@@ -28,16 +31,28 @@ const LoginScreen = () => {
         value={username}
         onChangeText={setUsername}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Password"
+          secureTextEntry={!showPassword} // Toggle secureTextEntry based on showPassword state
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity
+          style={styles.showHideButton}
+          onPress={() => setShowPassword(!showPassword)} // Toggle password visibility
+        >
+          <Ionicons
+            name={showPassword ? 'eye-off' : 'eye'} // Change icon based on showPassword state
+            size={24}
+            color="#7f8c8d"
+          />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color="#fff" /> // Show loading animation
         ) : (
           <Text style={styles.buttonText}>Login</Text>
         )}
@@ -86,6 +101,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 50,
+    padding: 10,
+  },
+  showHideButton: {
+    padding: 10,
   },
   button: {
     width: '80%',

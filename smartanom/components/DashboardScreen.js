@@ -1,17 +1,23 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, useWindowDimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import SensorCard from './SensorCard';
+import SensorCard from '../components/SensorCard';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerActions } from '@react-navigation/native';
+import { DarkModeContext } from '../components//DarkModeContext';
 
 const DashboardScreen = () => {
+  const { darkMode } = useContext(DarkModeContext);
   const navigation = useNavigation();
+  const { width: screenWidth } = useWindowDimensions();
+
+  const styles = getStyles(darkMode);
 
   // Plant data
   const plantName = 'Lettuce (Romaine)';
   const plantHealth = 'Healthy';
-  const plantRecommendation = 'Maintain pH between 5.5 - 6.5 and ensure adequate light (60,000 - 100,000 Lux).';
+  const plantRecommendation =
+    'Maintain pH between 5.5 - 6.5 and ensure adequate light (60,000 - 100,000 Lux).';
 
   // Sensor data
   const sensorData = {
@@ -22,6 +28,32 @@ const DashboardScreen = () => {
     humidity: 60,
     light: 75000,
     co2: 450,
+  };
+
+  // Solar and Battery data
+  const solarBatteryData = {
+    batteryPercentage: 85, // Battery percentage
+    solarCurrent: 4.5, // Current from solar in Amperes (A)
+    batteryHealth: 'Good', // Battery health status
+  };
+
+  // Water System data
+  const waterSystemData = {
+    waterFlowSpeed: 2.5, // Water flow speed in liters per minute (L/min)
+    waterPumpMode: 'High', // Water pump mode (Low, Medium, High)
+    waterFertilizer: 'NPK 10-10-10', // Recommended water fertilizer
+  };
+
+  // Maximum pump mode power
+  const maxPumpMode = 'High';
+
+  // Determine water change status based on pump mode
+  const getWaterChangeStatus = () => {
+    if (waterSystemData.waterPumpMode === maxPumpMode) {
+      return 'Triggered (Pump at Max)';
+    } else {
+      return 'Due in 2 days';
+    }
   };
 
   // Chart data
@@ -36,8 +68,8 @@ const DashboardScreen = () => {
     ],
   };
 
-  // Get screen width for responsive chart
-  const screenWidth = Dimensions.get('window').width - 40; 
+  // Responsive chart width
+  const chartWidth = screenWidth - 40; // Adjust padding dynamically
 
   return (
     <ScrollView style={styles.container}>
@@ -52,7 +84,9 @@ const DashboardScreen = () => {
       {/* Plant Information */}
       <View style={styles.plantContainer}>
         <Text style={styles.plantName}>{plantName}</Text>
-        <Text style={styles.plantHealth}>Health: <Text style={{ color: '#27ae60' }}>{plantHealth}</Text></Text>
+        <Text style={styles.plantHealth}>
+          Health: <Text style={{ color: '#27ae60' }}>{plantHealth}</Text>
+        </Text>
         <Text style={styles.plantRecommendation}>{plantRecommendation}</Text>
       </View>
 
@@ -62,7 +96,7 @@ const DashboardScreen = () => {
         <View style={styles.chartWrapper}>
           <LineChart
             data={chartData}
-            width={screenWidth} 
+            width={chartWidth}
             height={220}
             yAxisSuffix=" pH"
             chartConfig={{
@@ -98,6 +132,32 @@ const DashboardScreen = () => {
         <SensorCard title="CO2" value={sensorData.co2} unit="ppm" />
       </View>
 
+      {/* Solar and Battery Information */}
+      <View style={styles.solarBatteryContainer}>
+        <Text style={styles.solarBatteryTitle}>Solar & Battery Status</Text>
+        <View style={styles.sensorGrid}>
+          <SensorCard title="Battery %" value={solarBatteryData.batteryPercentage} unit="%" />
+          <SensorCard title="Solar Current" value={solarBatteryData.solarCurrent} unit="A" />
+          <SensorCard title="Battery Health" value={solarBatteryData.batteryHealth} unit="" />
+        </View>
+      </View>
+
+      {/* Water System Information */}
+      <View style={styles.waterSystemContainer}>
+        <Text style={styles.waterSystemTitle}>Water System Status</Text>
+        <View style={styles.sensorGrid}>
+          <SensorCard title="Flow Speed" value={waterSystemData.waterFlowSpeed} unit="L/min" />
+          <SensorCard title="Pump Mode" value={waterSystemData.waterPumpMode} unit="" />
+          <SensorCard
+            title="Water Change"
+            value={getWaterChangeStatus()}
+            unit=""
+            statusColor={waterSystemData.waterPumpMode === maxPumpMode ? '#e74c3c' : '#2ecc71'}
+          />
+          <SensorCard title="Fertilizer" value={waterSystemData.waterFertilizer} unit="" />
+        </View>
+      </View>
+
       {/* Plant Health Status */}
       <View style={styles.healthContainer}>
         <Text style={styles.healthTitle}>Plant Health Status</Text>
@@ -115,28 +175,31 @@ const DashboardScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (darkMode) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f4f7',
+    backgroundColor: darkMode ? '#121212' : '#f0f4f7',
     padding: 20,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',  // Ensure spacing between the icon and the text
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
+    paddingTop: 30,
   },
   menuIcon: {
     fontSize: 24,
-    color: '#2c3e50',
+    color: darkMode ? '#ffffff' : '#2c3e50',
+    marginTop: 10,
   },
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2c3e50',
+    color: darkMode ? '#ffffff' : '#2c3e50',
     textAlign: 'center',
-    flex: 1,  // Ensure headerText takes up remaining space
+    flex: 1,
+    marginTop: 10,
   },
   plantContainer: {
     backgroundColor: '#fff',
@@ -176,7 +239,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   chartWrapper: {
-    alignItems: 'center', 
+    alignItems: 'center',
   },
   chartTitle: {
     fontSize: 18,
@@ -191,6 +254,40 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+  },
+  solarBatteryContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  solarBatteryTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 10,
+  },
+  waterSystemContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  waterSystemTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 10,
   },
   healthContainer: {
     backgroundColor: '#fff',

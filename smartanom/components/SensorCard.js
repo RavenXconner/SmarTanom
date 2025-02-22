@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { DarkModeContext } from '../components//DarkModeContext';
 
 const SensorCard = ({ title, value, unit }) => {
+  const { darkMode } = useContext(DarkModeContext);
+  const styles = getStyles(darkMode);
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{title}</Text>
@@ -10,10 +14,10 @@ const SensorCard = ({ title, value, unit }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (darkMode) => StyleSheet.create({
   card: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: darkMode ? '#333333' : '#fff',
     borderRadius: 16,
     padding: 15,
     marginBottom: 15,
@@ -25,12 +29,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: '#7f8c8d',
+    color: darkMode ? '#bdc3c7' : '#7f8c8d',
   },
   value: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2c3e50',
+    color: darkMode ? '#ffffff' : '#2c3e50',
   },
 });
 
