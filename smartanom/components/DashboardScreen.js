@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions, useWindowDimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import { Picker } from '@react-native-picker/picker'; // Import Picker
+import { Picker } from '@react-native-picker/picker'; 
 import SensorCard from '../components/SensorCard';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerActions } from '@react-navigation/native';
