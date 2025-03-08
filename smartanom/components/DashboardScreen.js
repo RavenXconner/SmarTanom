@@ -132,15 +132,6 @@ const DashboardScreen = () => {
         <SensorCard title="CO2" value={sensorData.co2} unit="ppm" />
       </View>
 
-      {/* Solar and Battery Information */}
-      <View style={styles.solarBatteryContainer}>
-        <Text style={styles.solarBatteryTitle}>Solar & Battery Status</Text>
-        <View style={styles.sensorGrid}>
-          <SensorCard title="Battery %" value={solarBatteryData.batteryPercentage} unit="%" />
-          <SensorCard title="Solar Current" value={solarBatteryData.solarCurrent} unit="A" />
-          <SensorCard title="Battery Health" value={solarBatteryData.batteryHealth} unit="" />
-        </View>
-      </View>
 
       {/* Water System Information */}
       <View style={styles.waterSystemContainer}>
@@ -158,19 +149,6 @@ const DashboardScreen = () => {
         </View>
       </View>
 
-      {/* Plant Health Status */}
-      <View style={styles.healthContainer}>
-        <Text style={styles.healthTitle}>Plant Health Status</Text>
-        <View style={styles.healthStatus}>
-          <Text style={styles.healthText}>pH: {sensorData.pH} (Ideal: 5.5 - 6.5)</Text>
-          <Text style={styles.healthText}>EC: {sensorData.EC} mS/cm (Ideal: 1.2 - 2.4)</Text>
-          <Text style={styles.healthText}>TDS: {sensorData.TDS} ppm (Ideal: 600 - 1,200)</Text>
-          <Text style={styles.healthText}>Temperature: {sensorData.temperature}°C (Ideal: 18°C - 22°C)</Text>
-          <Text style={styles.healthText}>Humidity: {sensorData.humidity}% (Ideal: 50% - 70%)</Text>
-          <Text style={styles.healthText}>Light: {sensorData.light} Lux (Ideal: 60,000 - 100,000)</Text>
-          <Text style={styles.healthText}>CO2: {sensorData.co2} ppm (Ideal: 400 - 600)</Text>
-        </View>
-      </View>
     </ScrollView>
   );
 };
