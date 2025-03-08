@@ -24,7 +24,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <Image source={require('../assets/logo.png')} style={styles.logo} />
       <Text style={styles.title}>SmarTanom</Text>
-      <Text style={styles.subtitle}>Vertical Hydroponic Monitoring</Text>
+      <Text style={styles.subtitle}>Hydroponic Monitoring System</Text>
       <TextInput
         style={styles.input}
         placeholder="Username"
