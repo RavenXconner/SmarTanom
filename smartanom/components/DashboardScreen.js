@@ -61,7 +61,7 @@ const DashboardScreen = () => {
     labels: ['12AM', '3AM', '6AM', '9AM', '12PM', '3PM', '6PM'],
     datasets: [
       {
-        data: [6.0, 6.1, 6.2, 6.3, 6.2, 6.1, 6.0],
+        data: [6.9, 6.1, 6.2, 6.3, 6.9  , 6.1, 6.0],
         color: (opacity = 1) => `rgba(39, 174, 96, ${opacity})`,
         strokeWidth: 2,
       },
